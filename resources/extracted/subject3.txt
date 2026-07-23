@@ -1,0 +1,188 @@
+វិញ្ញាសាអនុវត្តត្រៀមប្រឡងបញ្ចប់ការសិក្សា
+ឆ្នាំសិក្សា ២០២៥-២០២៦
+សម័យប្រឡងៈ ថ្ងៃទី២៩ ខែកក្កដា ឆ្នាំ២០២៦
+មុខជំនាញៈ ការអភិវឌ្ឍន៍គេហទំព័រ និងកម្មវិធីទូរស័ព្ទ
+រយៈពេលៈ ១២០នាទី ពិន្ទុៈ  ១០០
+___________________________(​​ត្រៀមប្រឡង)_______________________
+វិញ្ញាសាៈ ការអភិវឌ្ឍមុខងារនៅផ្នែកខាងក្រោយស្របទៅតាមតំរូវការប្រើប្រាស់​
+Part A — The scenario
+Toul Kork Mini-Mart is a small family shop in Phnom Penh selling rice, drinks, and everyday goods. Until now the owner tracked everything in a paper notebook: which products are in stock, who ordered what, and which orders are paid.
+The shop hired your team to build the backend API. A previous developer already set up the Express project, the routes, and part of the database schema — your job is to finish it in 2 hours.
+The shop's rules:
+•  A customer can order a product only if enough stock is available.
+•  The total price is always quantity × product price — calculated by the server, never sent by the client.
+•  A new order starts as PENDING; only pending orders can be cancelled — the stock goes back on the shelf.
+What is provided (do not change)
+•  Express app, routes, controllers, error handling — all working
+•  Customer and Product models in prisma/schema.prisma
+•  Seed data (npm run seed)
+•  requests.http to test every task
+What you must do
+The tasks in Part C — marked TODO in the code. Only these files are yours to edit:
+•  prisma/schema.prisma
+•  src/repositories/product.repository.js
+•  src/repositories/customer.repository.js
+•  src/services/order.service.js
+Setup steps (do this first, ~10 minutes)
+1. Fork the starter repository to your own GitHub account, then clone your fork. Name your repo C3_<StudentID>_<YourName>.
+2. npm install
+3. Create an empty PostgreSQL database named storedb
+4. cp .env.example .env and edit DATABASE_URL
+5. Start the server: npm run dev — you should see "Server running on http://localhost:3000"
+(Migration and seed come later — they are part of task S5.)
+Part B — Database reference (ERD & data dictionary)
+
+Data dictionary
+Customer (already in the schema)
+Column
+Type
+Constraints
+id
+Int
+PK, auto-increment
+name
+String
+required
+email
+String
+required, unique
+phone
+String
+optional (nullable)
+createdAt
+DateTime
+default: now
+orders
+Order[]
+relation: one customer has many orders
+
+Product (already in the schema)
+Column
+Type
+Constraints
+id
+Int
+PK, auto-increment
+name
+String
+required
+price
+Int
+required — price per unit in US dollars
+stock
+Int
+required — units on the shelf right now
+createdAt
+DateTime
+default: now
+orders
+Order[]
+relation: one product has many orders
+
+OrderStatus (enum) — you create this (S5)
+Value
+Meaning
+
+PENDING
+the order is placed but not paid yet
+
+PAID
+the order is paid — it can no longer be cancelled
+
+CANCELLED
+the order was cancelled (stock restored)
+
+
+Order — you create this (S5)
+Column
+Type
+Constraints
+id
+Int
+PK, auto-increment
+customerId
+Int
+FK → Customer.id, required
+productId
+Int
+FK → Product.id, required
+quantity
+Int
+required — number of units
+totalPrice
+Int
+required — quantity × price, in US dollars
+status
+OrderStatus
+required, default: PENDING
+orderDate
+DateTime
+required, default: now
+customer
+Customer
+relation field
+product
+Product
+relation field
+
+Part C — Your tasks (100 points)
+Suggested timing: S5 ≈ 25 min · S6 ≈ 40 min · S7 ≈ 40 min · buffer ≈ 15 min
+S5 — Set up the relational database (30 pts)
+S5.1 — Database & connection (10 pts)
+Create an empty PostgreSQL database named storedb, copy .env.example to .env, and set your DATABASE_URL.
+S5.2 — Complete the schema (15 pts)
+In prisma/schema.prisma, add the OrderStatus enum and the Order model exactly as described in Part B: correct types, relations to Customer and Product, defaults for status and orderDate.
+S5.3 — Migrate & seed (5 pts)
+npm run migrate     # give the migration a name, e.g. "init"
+npm run seed        # loads 4 customers, 5 products, 5 orders
+
+Both must finish without errors.
+Commit: "S5 database setup done"
+S6 — SQL data access components (35 pts)
+Implement the TODO functions in src/repositories/. The routes and controllers already call them — you only write the data access code.
+S6.1 — List products (10 pts) — product.repository.js
+GET  /api/products
+
+•  Returns all products.
+GET  /api/products?search=rice
+
+•  Filters by name, case-insensitive.
+Use Prisma Client.
+S6.2 — Customer with orders (10 pts) — customer.repository.js
+GET  /api/customers/2
+
+•  Returns the customer with their orders, and each order’s product.
+•  Unknown id → the controller answers 404 (already done) — your function just returns null.
+S6.3 — Sales report (15 pts) — product.repository.js
+GET  /api/reports/product-sales
+
+•  Returns every product with quantitySold and moneyEarned from non-CANCELLED orders only (0 included).
+•  Ordered by quantitySold, biggest first.
+•  Must use prisma.$queryRaw with JOIN + GROUP BY + SUM.
+•  A Prisma-Client-only solution earns 0 for this task.
+Commit after each function: "S6.1 ...", "S6.2 ...", "S6.3 ..."
+S7 — Server-side business components (35 pts)
+Implement the TODO functions in src/services/order.service.js. All business rules are written above each function.
+S7.1 — Place an order (25 pts)
+POST  /api/orders
+
+{ "customerId": 3, "productId": 3, "quantity": 2 }
+
+•  400 if quantity is not a whole number greater than 0
+•  404 if customer or product does not exist
+•  409 if the product does not have enough stock left
+•  totalPrice = quantity × price — calculated by the server, never taken from the request
+•  creates the order (status PENDING by default) and decreases stock by quantity in one transaction (prisma.$transaction)
+S7.2 — Cancel an order (10 pts)
+PUT  /api/orders/2/cancel
+
+•  404 if the order does not exist
+•  409 if the order is not PENDING (a PAID order cannot be cancelled)
+•  sets status = CANCELLED and increases the product’s stock by the order’s quantity
+Commit: "S7.1 place order", "S7.2 cancel order" — then push!
+Before you finish — submission checklist
+•  All work is committed (one commit per task minimum)
+•  npm run seed then click through requests.http — every request behaves as described in its comment
+•  Pushed to your repository
+•  Repository URL submitted in the teacher’s form
+Good luck!

@@ -1,0 +1,372 @@
+C3  WMAD  Preparatory  Questions  
+State  Examination  Review  
+Develop  Static  &  Dynamic  Website  User  Interfaces  (Skills  3  &  4)   
+Part  I  —  Multiple  Choice  Questions  (33  
+Marks)
+ 
+Choose  the  best  answer.  
+Next.js  (Questions  1–5)  
+1.  Which  command  creates  a  new  Next.js  project?  
+A.  npm  create  next-app  
+B.  npx  create-next-app@latest  
+C.  npm  install  next  
+D.  next  new  
+ 
+2.  Which  command  starts  the  Next.js  development  server?  
+A.  npm  build  
+B.  npm  run  dev  
+C.  npm  start  
+D.  next  dev  start  
+ 
+3.  Which  folder  contains  pages  when  using  the  Next.js  App  Router?  
+A.  pages/  
+B.  src/  
+C.  app/  
+D.  public/  
+ 
+4.  Which  folder  is  used  to  store  static  files  (images,  icons,  etc.)  in  Next.js?  
+A.  assets  
+B.  images  
+C.  public  
+D.  static  
+ 
+5.  Which  file  is  commonly  used  to  define  the  homepage  in  the  Next.js  App  Router?  
+A.  home.js  
+B.  page.js  
+C.  index.html  
+D.  app.js  
+ 
+React  (Questions  6–11)  
+6.  What  is  the  main  purpose  of  a  React  Component?  
+A.  Store  data  
+B.  Create  reusable  user  interfaces  
+C.  Connect  to  a  database  
+D.  Deploy  a  website  
+ 
+7.  What  is  the  main  purpose  of  Props  in  React?  
+A.  Store  API  data  
+B.  Pass  data  between  components  
+C.  Style  components  
+D.  Create  routes  
+ 
+8.  Which  React  Hook  is  commonly  used  to  manage  component  state?  
+A.  useRouter()  
+B.  useState()  
+C.  useEffect()  
+D.  useRef()  
+ 
+9.  Which  React  Hook  is  commonly  used  to  fetch  data  after  a  component  loads?  
+A.  useState()  
+B.  useEffect()  
+C.  useMemo()  
+D.  useCallback()  
+ 
+10.  Which  React  Hook  is  used  to  perform  side  effects?  
+A.  useState()  
+B.  useEffect()  
+C.  useRef()  
+D.  useMemo()  
+ 
+11.  Which  React  Hook  updates  the  User  Interface  (UI)  when  the  component  state  
+changes?
+ 
+A.  useState()  
+B.  useRef()  
+C.  useMemo()  
+D.  useRouter()  
+ 
+Tailwind  CSS  &  Responsive  Design  (Questions  12–19)  
+12.  What  is  the  purpose  of  Tailwind  CSS?  
+A.  Database  management  
+B.  Utility-first  styling  
+C.  API  integration  
+D.  Routing  
+ 
+13.  Which  Tailwind  CSS  class  creates  a  Flexbox  container?  
+A.  grid  
+B.  flex  
+C.  inline  
+D.  block  
+ 
+14.  Which  CSS  property  creates  a  Flexbox  layout?  
+A.  display:  flex  
+B.  display:  grid  
+C.  position:  absolute  
+D.  float:  left  
+ 
+15.  Which  Tailwind  CSS  class  creates  a  Grid  layout?  
+A.  flex  
+B.  grid  
+C.  container  
+D.  inline-grid  
+ 
+16.  Which  Tailwind  CSS  class  creates  three  columns?  
+A.  grid-cols-2  
+B.  grid-cols-3  
+C.  flex-row  
+D.  col-3  
+ 
+17.  Which  Tailwind  CSS  class  centers  items  horizontally  in  a  Flexbox  container?  
+A.  justify-center  
+B.  items-center  
+C.  content-center  
+D.  text-center  
+ 
+18.  Which  Tailwind  CSS  breakpoint  is  commonly  used  for  tablet  screens?  
+A.  sm  
+B.  md  
+C.  xl  
+D.  2xl  
+ 
+19.  Which  Tailwind  CSS  breakpoint  is  commonly  used  for  desktop  screens?  
+A.  sm  
+B.  md  
+C.  lg  
+D.  xs  
+ 
+REST  API  (Questions  20–27)  
+20.  Which  HTTP  method  retrieves  data  from  a  REST  API?  
+A.  POST  
+B.  GET  
+C.  DELETE  
+D.  PATCH  
+ 
+21.  Which  HTTP  method  is  commonly  used  to  create  new  data?  
+A.  GET  
+B.  POST  
+C.  DELETE  
+D.  PATCH  
+ 
+22.  Which  HTTP  method  is  commonly  used  to  update  existing  data?  
+A.  GET  
+B.  POST  
+C.  PUT  
+D.  OPTIONS  
+ 
+23.  Which  API  response  status  code  indicates  a  successful  request?  
+A.  200  
+B.  404  
+C.  500  
+D.  403  
+ 
+24.  Which  format  is  most  commonly  returned  by  REST  APIs?  
+A.  XML  
+B.  JSON  
+C.  HTML  
+D.  CSS  
+ 
+25.  Which  function  is  commonly  used  to  send  an  HTTP  request  in  JavaScript?  
+A.  axios()  
+B.  request()  
+C.  fetch()  
+D.  api()  
+ 
+26.  Which  function  converts  an  API  response  into  JSON  format?  
+A.  response.text()  
+B.  response.json()  
+C.  JSON.parse()  
+D.  response.data()  
+ 
+27.  Which  layout  is  most  suitable  for  displaying  product  cards?  
+A.  Flexbox  only  
+B.  CSS  Grid  
+C.  Float  
+D.  Position  
+ 
+Best  Practices  (Questions  28–33)  
+28.  What  should  be  displayed  while  waiting  for  data  from  a  REST  API?  
+A.  Blank  page  
+B.  Loading  Indicator  
+C.  Error  message  
+D.  Reload  page  
+ 
+29.  Why  should  loading  indicators  be  displayed?  
+A.  Increase  file  size  
+B.  Improve  user  experience  
+C.  Reduce  API  requests  
+D.  Hide  errors  
+ 
+30.  If  an  API  request  fails,  what  should  the  application  do?  
+A.  Crash  
+B.  Ignore  the  error  
+C.  Display  an  error  message  
+D.  Close  automatically  
+ 
+31.  Why  should  React  components  be  reusable?  
+A.  Increase  file  size  
+B.  Reduce  duplicated  code  
+C.  Make  debugging  harder  
+D.  Replace  CSS  
+ 
+32.  Which  practice  improves  code  maintainability?  
+A.  Duplicate  components  
+B.  Reusable  components  
+C.  Inline  styles  only  
+D.  Large  files  
+ 
+33.  Which  statement  best  describes  responsive  web  design?  
+A.  It  only  works  on  desktop  computers.  
+B.  It  allows  websites  to  adapt  to  different  screen  sizes  and  devices.  
+C.  It  makes  websites  load  faster  by  reducing  images.  
+D.  It  is  only  used  for  mobile  applications.  
+ 
+Part  II  —  Matching  Questions  (8  Marks)  
+Instructions:  Match  Column  A  with  the  correct  answer  in  Column  B .  
+Column  A   Column  B  
+1.  React  Component   A.  Homepage  
+2.  Tailwind  CSS   B.  API  Request  
+3.  useState()   C.  Side  Effects  
+4.  useEffect()   D.  Utility-first  CSS  
+5.  REST  API   E.  Manage  Component  State  
+6.  page.js   F.  Reusable  User  Interface  
+7.  fetch()   G.  Remote  Data  Service  
+8.  CSS  Grid   H.  Two-dimensional  Layout     
+Part  III  —  Fill  in  the  Blank  (10  Marks)  
+Complete  each  sentence  with  the  correct  word  or  phrase.  
+1.  Next.js  is  a  __________  framework.  2.  Tailwind  CSS  follows  a  __________  approach.  3.  API  data  is  commonly  returned  in  __________  format.  4.  __________  is  used  to  send  an  HTTP  request.  5.  __________  helps  websites  adapt  to  different  screen  sizes.  6.  React  components  help  make  code  __________.  7.  The  __________  hook  is  used  to  manage  state.  8.  REST  APIs  commonly  exchange  data  using  __________.  9.  Responsive  layouts  use  Tailwind  __________.  10.  Loading  indicators  improve  the  __________  experience.  
+ 
+Part  IV  —  Short  Answer  /  Essay  Questions  
+(63
+ 
+Marks)
+ 
+Answer  all  the  following  questions.  
+1.  Explain  the  purpose  and  advantages  of  using  Reusable  Components  in  a  Next.js  
+application.
+ 
+(7
+ 
+marks)
+ 
+ 
+2.  Explain  the  differences  between  Props  and  State  in  React.  (7  marks)  
+ 
+3.  Compare  Flexbox  and  CSS  Grid  for  responsive  web  layouts.  Give  one  example  of  when  you  
+would
+ 
+use
+ 
+each
+ 
+layout.
+ 
+(7
+ 
+marks)
+ 
+ 
+4.  Explain  how  Tailwind  CSS  supports  Responsive  Web  Design .  (7  marks)  
+ 
+5.  Explain  the  importance  of  Responsive  Design  in  modern  web  development.  (7  marks)  
+ 
+6.  Describe  the  process  of  fetching  data  from  a  REST  API  and  displaying  it  in  a  Next.js  
+application.
+ 
+(7
+ 
+marks)
+ 
+ 
+7.  Describe  how  Asynchronous  API  Requests  improve  user  experience  in  Next.js.  (7  marks)  
+ 
+8.  Explain  why  Input  Validation  is  important  in  web  applications.  Explain  the  difference  between  
+Client-side
+ 
+Validation
+ 
+and
+ 
+Server-side
+ 
+Validation
+ 
+with
+ 
+examples.
+ 
+(7
+ 
+marks)
+ 
+ 
+9.  Explain  why  Error  Handling  is  important  when  working  with  APIs  and  Forms .  (7  marks)  
+  
+Part  V  —  Case  Study  Practice  (35  Marks)  
+Scenario  
+A  company  wants  to  develop  a  Responsive  Event  Management  Website  using  Next.js  and  
+Tailwind
+ 
+CSS
+.
+ 
+The
+ 
+website
+ 
+allows
+ 
+users
+ 
+to
+ 
+browse
+ 
+upcoming
+ 
+events
+ 
+and
+ 
+register
+ 
+online.
+ 
+The  website  includes:  
+●  Navigation  Bar  ●  Hero  Section  ●  Event  Categories  ●  Event  List  ●  Event  Detail  ●  Event  Registration  Form  
+Event  information  is  retrieved  from  a  REST  API .  
+The  website  must  be  responsive  and  work  correctly  on  mobile,  tablet,  and  desktop  devices.  
+ 
+1.  Explain  how  you  would  organize  the  website  using  Reusable  
+Components
+ 
+and
+ 
+Responsive
+ 
+Layouts.
+ 
+(10
+ 
+marks)
+ 
+ 
+2.  Explain  how  you  would  retrieve  and  display  event  information  from  a  
+REST
+ 
+API.
+ 
+(10
+ 
+marks)
+ 
+ 
+3.  Describe  how  you  would  implement  the  Event  Registration  Form,  
+including
+ 
+Input
+ 
+Validation,
+ 
+Form
+ 
+Submission,
+ 
+and
+ 
+Error
+ 
+Handling.
+ 
+(15
+ 
+marks) 

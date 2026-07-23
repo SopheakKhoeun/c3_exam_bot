@@ -1,0 +1,349 @@
+C3  WMAD  Preparatory  Questions  
+State  Examination  Review  
+Implement  &  Develop  Relational  and  NoSQL  Databases  with  Data  Access  
+Components
+ 
+(Skills
+ 
+5
+ 
+&
+ 
+6)
+  
+Part  I  —  Multiple  Choice  Questions  (30  
+Questions)
+ 
+Choose  the  best  answer.  
+Database  Fundamentals  
+1.  What  is  the  role  of  a  Primary  Key  in  a  database?  
+A.  Store  duplicate  values  for  faster  searching  
+B.  Uniquely  identify  each  record  
+C.  Create  relationships  between  two  databases  
+D.  Encrypt  data  automatically  
+ 
+2.  Which  one  is  a  Relational  Database?  
+A.  MongoDB  
+B.  Redis  
+C.  MySQL  
+D.  Firebase  
+ 
+3.  Which  one  is  a  NoSQL  Database?  
+A.  Oracle  
+B.  PostgreSQL  
+C.  MongoDB  
+D.  MariaDB  
+ 
+4.  Which  SQL  statement  is  used  to  create  a  new  table?  
+A.  MAKE  TABLE  Students  
+B.  CREATE  TABLE  Students  
+C.  NEW  TABLE  Students  
+D.  INSERT  TABLE  Students  
+ 
+5.  Which  data  type  is  best  suited  for  storing  birth  dates?  
+A.  VARCHAR  
+B.  DATE  
+C.  INT  
+D.  BOOLEAN  
+ 
+6.  What  is  the  role  of  a  Foreign  Key?  
+A.  Sort  data  
+B.  Identify  each  record  
+C.  Create  relationships  between  tables  
+D.  Encrypt  data  
+ 
+7.  What  is  the  best  practice  when  designing  a  database?  
+A.  Do  not  use  Primary  Keys  
+B.  Store  duplicate  data  
+C.  Choose  appropriate  data  types  and  create  proper  relationships  
+D.  Store  all  data  in  one  table  
+ 
+Constraints  &  Normalization  
+8.  Which  constraint  prevents  duplicate  values?  
+A.  NOT  NULL  
+B.  UNIQUE  
+C.  CHECK  
+D.  DEFAULT  
+ 
+9.  Can  a  PRIMARY  KEY  contain  NULL  values?  
+A.  Yes  
+B.  No  
+C.  Only  in  special  cases  
+D.  Depends  on  the  DBMS  
+ 
+10.  What  does  a  FOREIGN  KEY  refer  to?  
+A.  A  normal  column  
+B.  The  Primary  Key  of  another  table  
+C.  A  data  type  
+D.  A  database  
+ 
+11.  Which  Normal  Form  removes  repeating  groups  of  data?  
+A.  First  Normal  Form  (1NF)  
+B.  Second  Normal  Form  (2NF)  
+C.  Third  Normal  Form  (3NF)  
+D.  Boyce-Codd  Normal  Form  (BCNF)  
+ 
+12.  What  does  VARCHAR(100)  mean?  
+A.  Stores  100  digits  
+B.  Stores  up  to  100  characters  
+C.  Stores  100  records  
+D.  Stores  100  bytes  
+ 
+SQL  
+13.  Which  SQL  statement  adds  a  new  column  to  an  existing  table?  
+A.  UPDATE  TABLE  
+B.  ALTER  TABLE  
+C.  MODIFY  TABLE  
+D.  CHANGE  TABLE  
+ 
+14.  ALTER  TABLE  is  used  for  
+A.  Modifying  the  table  structure  
+B.  Deleting  data  
+C.  Inserting  records  
+D.  Searching  records  
+ 
+15.  WHERE  clause  is  used  for  
+A.  Sorting  data  
+B.  Specifying  conditions  
+C.  Grouping  data  
+D.  Joining  tables  
+ 
+16.  Which  JOIN  returns  only  matching  records  from  both  tables?  
+A.  LEFT  JOIN  
+B.  RIGHT  JOIN  
+C.  INNER  JOIN  
+D.  FULL  JOIN  
+ 
+17.  What  does  LIKE  'A%' mean?  
+A.  Ends  with  A  
+B.  Starts  with  A  
+C.  Contains  A  in  the  middle  
+D.  Only  contains  A  
+ 
+18.  What  does  CRUD  stand  for?  
+A.  Create,  Read,  Update,  Delete  
+B.  Copy,  Read,  Upload,  Download  
+C.  Create,  Remove,  Update,  Download  
+D.  Check,  Read,  Upload,  Delete  
+ 
+19.  TRUNCATE  TABLE  is  different  from  DELETE  because  
+A.  TRUNCATE  removes  all  records  but  keeps  the  table.  
+B.  TRUNCATE  deletes  the  table.  
+C.  TRUNCATE  creates  a  table.  
+D.  There  is  no  difference.  
+ 
+MongoDB  
+20.  In  MongoDB,  data  is  stored  as  
+A.  Rows  
+B.  Tables  
+C.  Documents  
+D.  Worksheets  
+ 
+21.  Which  MongoDB  command  inserts  one  document?  
+A.  db.students.insertOne({})  
+B.  db.students.add({})  
+C.  db.students.create({})  
+D.  db.students.new({})  
+ 
+22.  Which  MongoDB  command  creates  a  collection?  
+A.  createCollection()  
+B.  newCollection()  
+C.  insertCollection()  
+D.  makeCollection()  
+ 
+23.  Which  MongoDB  command  inserts  multiple  documents?  
+A.  insertOne()  
+B.  insertMany()  
+C.  addMany()  
+D.  createMany()  
+ 
+24.  Which  MongoDB  command  searches  for  documents?  
+A.  insertOne()  
+B.  find()  
+C.  updateOne()  
+D.  createCollection()  
+ 
+25.  What  does  findOne() return?  
+A.  All  documents  
+B.  One  document  
+C.  One  collection  
+D.  One  database  
+ 
+26.  What  does  updateMany() modify?  
+A.  Database  
+B.  Collection  
+C.  Multiple  documents  
+D.  One  document  
+ 
+27.  What  does  deleteMany() do?  
+A.  Delete  a  database  
+B.  Delete  a  collection  
+C.  Delete  multiple  documents  
+D.  Delete  one  document  
+ 
+Database  Concepts  
+28.  What  is  the  purpose  of  an  Index?  
+A.  Reduce  query  speed  
+B.  Increase  query  speed  
+C.  Delete  tables  
+D.  Increase  data  size  
+ 
+29.  When  is  SQL  more  appropriate  than  NoSQL?  
+A.  When  the  schema  changes  frequently  
+B.  When  data  relationships  are  well  defined  
+C.  When  data  is  unstructured  
+D.  When  using  JSON  documents  
+ 
+30.  Which  Aggregate  Function  returns  the  maximum  value?  
+A.  COUNT()  
+B.  SUM()  
+C.  MAX()  
+D.  AVG()  
+ 
+Part  II  —  Matching  Questions  (10  Marks)  
+Instructions:  Match  Column  A  with  the  correct  answer  in  Column  B .  
+Column  A   Column  B  
+1.  Primary  Key   A.  Counts  the  number  of  records  
+2.  Foreign  Key   B.  Creates  relationships  between  tables  
+3.  INNER  JOIN   C.  Returns  all  rows  from  the  left  table  
+4.  LEFT  JOIN   D.  Groups  rows  with  the  same  values  
+5.  GROUP  BY   E.  Uniquely  identifies  each  record  
+6.  COUNT()   F.  Finds  the  maximum  value  
+7.  MAX()   G.  Does  not  allow  duplicate  values  
+8.  UNIQUE   H.  Sets  a  default  value  
+9.  DEFAULT   I.  Returns  only  matching  rows  from  both  tables  
+10.  find()   J.  Finds  documents  in  MongoDB    
+Part  III  —  Short  Answer  /  Essay  Questions  
+(8
+ 
+Questions)
+ 
+Answer  all  the  following  questions.  
+1.  Explain  the  purpose  of  CRUD  Operations  (Create,  Read,  Update,  and  Delete)  in  SQL.  (7  
+marks)
+ 
+ 
+2.  Explain  the  differences  between  INNER  JOIN,  LEFT  JOIN,  RIGHT  JOIN,  and  FULL  JOIN .  
+How
+ 
+does
+ 
+each
+ 
+JOIN
+ 
+return
+ 
+different
+ 
+results?
+ 
+(8
+ 
+marks)
+ 
+ 
+3.  Explain  the  purpose  of  Aggregate  Functions  (COUNT(),  SUM(),  AVG(),  MIN(),  and  MAX()).  Give  one  example  for  each  function.  (20  marks)  
+ 
+4.  What  is  Normalization ?  Why  is  it  important  in  database  design?  (7  marks)  
+ 
+5.  Explain  the  differences  between  One-to-One ,  One-to-Many ,  and  Many-to-Many  
+relationships.
+ 
+(8
+ 
+marks)
+ 
+ 
+6.  Explain  how  CRUD  Operations  work  in  MongoDB .  Describe  the  commands  used  for  Create ,  
+Read
+,
+ 
+Update
+,
+ 
+and
+ 
+Delete
+.
+ 
+(20
+ 
+marks)
+ 
+ 
+7.  Explain  the  importance  of  Database  Constraints .  Describe  the  purpose  of  PRIMARY  KEY ,  
+FOREIGN
+ 
+KEY
+,
+ 
+UNIQUE
+,
+ 
+NOT
+ 
+NULL
+,
+ 
+and
+ 
+DEFAULT
+.
+ 
+(7
+ 
+marks)
+ 
+ 
+8.  What  is  the  purpose  of  the  WHERE  clause?  Explain  the  difference  between  WHERE  and  
+HAVING
+.
+ 
+(8
+ 
+marks)
+ 
+  
+Part  IV  —  Case  Study  (35  Marks)  
+Employee  Management  System  
+A  company  wants  to  develop  an  Employee  Management  System  to  store  employee  
+information
+ 
+and
+ 
+department
+ 
+information.
+ 
+Requirements  
+Create  a  database  named  CompanyDB .  
+The  database  contains  the  following  tables.  
+Departments  
+●  department_id  ●  department_name  ●  location  
+Employees  
+●  employee_id  ●  full_name  ●  gender  ●  date_of_birth  ●  phone_number  ●  salary  ●  department_id  
+Each  employee  belongs  to  one  department ,  while  one  department  can  have  many  
+employees
+.
+ 
+ 
+Tasks  
+1.  Write  an  SQL  script  to  create  the  database  CompanyDB.  (3  marks)   
+2.  Write  SQL  scripts  to  create  both  tables.  (3  marks)   
+3.  Select  appropriate  data  types  for  each  field.  (3  marks)   
+4.  Define  the  Primary  Key  and  Foreign  Key  for  each  table.  (5  marks)   
+5.  Write  SQL  scripts  to  insert  at  least  5  records  into  each  table.  (5  marks)   
+6.  Write  SQL  queries  to:  
+●  Display  all  employees.  (2  marks)  ●  Display  employees  whose  salary  is  greater  than  $500 .  (3  marks)  ●  Display  employee  names  together  with  their  department  names.  (5  marks)  ●  Display  the  number  of  employees  in  each  department.  (5  marks)  
+ 
+7.  Write  an  SQL  statement  to  update  the  phone  number  of  one  employee.  (4  
+marks)
+  
+8.  Write  an  SQL  statement  to  delete  one  employee  record  from  the  
+database.
+ 
+(5
+ 
+marks)
+  

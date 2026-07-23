@@ -1,0 +1,50 @@
+វិញ្ញាសាអនុវត្តត្រៀមប្រឡងបញ្ចប់ការសិក្សា
+ឆ្នាំសិក្សា ២០២៥-២០២៦
+សម័យប្រឡងៈ ថ្ងៃទី២៩ ខែកក្កដា ឆ្នាំ២០២៦
+មុខជំនាញៈ ការអភិវឌ្ឍន៍គេហទំព័រ និងកម្មវិធីទូរស័ព្ទ
+រយៈពេលៈ ១២០នាទី ពិន្ទុៈ  ១០០
+___________________________(​ត្រៀមប្រឡង)_______________________
+វិញ្ញាសាៈ ការអភិវឌ្ឍវេបសាយ Static និង Dynamic
+Part A — The scenario
+Toul Kork Mini-Mart, the shop you built the backend for in Session 1, is happy: the API works. But the shop staff cannot use requests.http — they need a real web app. Your team is hired to build the Mini-Mart Order Desk UI in React + TailwindCSS.
+A previous developer already set up the project: Vite, TailwindCSS, and a working app shell with three tabs (Products · Customer · Order). Your job is to build the three pages in 2 hours.
+What the staff must be able to do:
+	•	Products tab — see every product with its price and stock at a glance (green = in stock, red = out of stock) and search by name.
+	•	Customer tab — enter a customer id, see who they are and their orders, and cancel a pending order.
+	•	Order tab — place an order for a customer and immediately see a confirmation, or a clear error message when it is not possible.
+What is provided (do not change the backend)
+	•	The finished Session 1 backend (Mini Store API) as a separate project — run it with npm install, set .env, npx prisma migrate dev, npm run seed, npm run dev. Reset data anytime with npm run seed.
+	•	This React starter: Tailwind configured, header + tab navigation working, src/api.js with the base URL, sample data in every TODO block.
+	•	docs/ — guideline, screens + user flows + API reference, requirements, rubric.
+What you must do
+The TODO blocks in these three files (only these are graded):
+	•	src/pages/ProductsPage.jsx
+	•	src/pages/OrderPage.jsx
+	•	src/pages/CustomerPage.jsx
+Part B — Setup (​10 pts, do this first)
+1. Start the provided backend and check http://localhost:3000/api/products shows 5 products.
+2. npm install and npm run dev in this starter — the shell with three tabs must appear at http://localhost:5173.
+3. Create your exam repo C3_<ID>_<Name>_S2 and make a first commit.
+
+Part C — Tasks (90 pts)
+S3 — Static UI with TailwindCSS (35 pts)
+Build the markup with the given SAMPLE_* data. Colors are your choice; every element and state below must be clearly styled.
+S3.1. Products page (10 pts)
+Styled search input; table with styled header and borders/zebra rows; price shown as a $ amount; stock badge (green when stock > 0, red when stock = 0).
+S3.2. Order form (15 pts)
+Labeled customer-id input, labeled product select with the sample options, labeled quantity input, submit button with hover state, green success box and red error box (hardcode both visible for now).
+S3.3. Customer page (10 pts)
+Customer-id input + Load button, customer info card, orders table with quantity and total price, status badge (PENDING yellow, PAID green, CANCELLED gray), Cancel button only on PENDING rows.
+
+S4 — Dynamic UI (55 pts)
+Replace the sample data with real fetch calls (base URL in src/api.js).
+S4.1. Load products (10 pts)
+Fetch on mount, "Loading…" while pending, real rows in the table.
+S4.2. Search (10 pts)
+The input refetches with ?search=<text>.
+S4.3. Load customer (10 pts)
+Load fetches the customer + orders; unknown id shows the API error message in a red box instead of the card.
+S4.4. Order (15 pts)
+Select filled from the API; submit posts { customerId, productId, quantity } (numbers); success shows a green confirmation and clears the form; 400/404/409 shows the API error message; never both boxes at once.
+S4.5. Cancel (10 pts)
+Cancel calls the API, then reloads the customer so the badge updates and the button disappears.

@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int        @id @default(autoincrement())
+  telegramId String     @unique
+  firstName  String?
+  username   String?
+  createdAt  DateTime   @default(now())
+  progress   Progress[]
+}
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  questions Question[]
+}
+
+model Question {
+  id          Int        @id @default(autoincrement())
+  categoryId  Int
+  title       String
+  answer      String
+  explanation String
+  difficulty  String     @default("medium")
+  createdAt   DateTime   @default(now())
+  category    Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  progress    Progress[]
+
+  @@index([categoryId])
+}
+
+model Progress {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  questionId Int
+  correct    Boolean
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([questionId])
+}
