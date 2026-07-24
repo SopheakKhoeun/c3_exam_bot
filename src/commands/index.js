@@ -5,7 +5,7 @@ const {
   handleAddCancel,
   handleAddText,
 } = require('./add');
-const { sendNowCommand } = require('./sendNow');
+const { sendNowCommand, sendHourlyNowCommand } = require('./sendNow');
 const {
   handleBackend,
   handleFrontend,
@@ -24,6 +24,7 @@ function registerCommands(bot) {
   bot.start(startCommand);
   bot.command('add', addCommand);
   bot.command('sendnow', sendNowCommand);
+  bot.command('sendhourly', sendHourlyNowCommand);
 
   bot.hears(MENU.BACKEND, handleBackend);
   bot.hears(MENU.FRONTEND, handleFrontend);

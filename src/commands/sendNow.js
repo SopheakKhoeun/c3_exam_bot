@@ -22,4 +22,22 @@ async function sendNowCommand(ctx) {
   }
 }
 
-module.exports = { sendNowCommand };
+async function sendHourlyNowCommand(ctx) {
+  try {
+    if (!isAdmin(ctx.from.id)) {
+      await ctx.reply('⛔ This command is restricted to admins.');
+      return;
+    }
+
+    await ctx.reply('⏱ Sending hourly 1-question drop to all users...');
+    const result = await scheduleService.sendHourlyQuestion(ctx);
+    await ctx.reply(
+      `Done.\nUsers: ${result.users}\nMessages sent: ${result.sent}\nUser failures: ${result.failed}`
+    );
+  } catch (error) {
+    console.error('sendHourlyNowCommand error:', error);
+    await ctx.reply('Failed to run hourly send. Check server logs.');
+  }
+}
+
+module.exports = { sendNowCommand, sendHourlyNowCommand };

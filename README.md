@@ -180,12 +180,13 @@ http://localhost:3000/health
 
 ## Daily Auto Practice
 
-Every day the bot sends **one question from each category** to all users who have used `/start`:
+| Schedule | What users get |
+|----------|----------------|
+| Every hour | **1 random question** |
+| 08:00 | One question from **each category** |
+| 13:00 | One question from **each category** |
 
-| Time | Default |
-|------|---------|
-| Morning | **08:00** |
-| Afternoon | **13:00 (1:00 PM)** |
+At 08:00 and 13:00 the hourly drop is skipped (daily pack only).
 
 Timezone default: `Asia/Phnom_Penh` (UTC+7).
 
@@ -195,11 +196,16 @@ Configure in `.env`:
 TZ_SCHEDULE=Asia/Phnom_Penh
 CRON_MORNING=0 8 * * *
 CRON_AFTERNOON=0 13 * * *
+CRON_HOURLY=0 * * * *
 ```
 
-Admin can test immediately with `/sendnow`.
+Also set `CRON_HOURLY` on Railway bot variables.
 
-**Note:** The Node process must keep running (`npm start`) for cron jobs to fire.
+Admin test commands:
+- `/sendnow` — daily all-category pack now
+- `/sendhourly` — one hourly question now
+
+**Note:** The bot process must keep running (Railway or `npm start`) for cron jobs to fire.
 
 ## Telegram Commands
 
@@ -207,12 +213,14 @@ Admin can test immediately with `/sendnow`.
 |---------|-------------|
 | `/start` | Open welcome menu |
 | `/add` | Admin-only interactive question creation |
-| `/sendnow` | Admin-only: run the daily all-category send now |
+| `/sendnow` | Admin-only: daily all-category send now |
+| `/sendhourly` | Admin-only: hourly 1-question send now |
 
 ### `/start` buttons
 
 - 📚 Backend — random Backend question
 - 🎨 Frontend — random Frontend question
+- 🛒 Fullstack — Mini Store + Order Desk scenarios
 - 🎲 Random Question — random question from all categories
 - 📊 My Progress — answered / correct / wrong / accuracy
 

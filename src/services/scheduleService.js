@@ -18,6 +18,14 @@ function formatScheduleIntro(slotLabel) {
   );
 }
 
+function formatHourlyIntro() {
+  return (
+    `⏱ <b>Hourly practice drop</b>\n\n` +
+    `Here is <b>1 random question</b> for this hour.\n` +
+    `Tap <b>Show Answer</b> when you are ready.`
+  );
+}
+
 class ScheduleService {
   /**
    * Send one random question per category to every registered user.
@@ -87,6 +95,62 @@ class ScheduleService {
     }
 
     console.log(`[schedule] Done. messages≈${sent}, userFailures=${failed}`);
+    return { users: users.length, sent, failed };
+  }
+
+  /**
+   * Send one random question (any category) to every registered user.
+   */
+  async sendHourlyQuestion(bot) {
+    const users = await userService.listAll();
+
+    if (users.length === 0) {
+      console.log('[schedule] Hourly: no users to notify');
+      return { users: 0, sent: 0, failed: 0 };
+    }
+
+    let sent = 0;
+    let failed = 0;
+
+    console.log(`[schedule] Hourly drop to ${users.length} user(s)`);
+
+    for (const user of users) {
+      try {
+        const question = await questionService.getRandom(null);
+        if (!question) {
+          console.log('[schedule] Hourly: no questions in database');
+          break;
+        }
+
+        await bot.telegram.sendMessage(user.telegramId, formatHourlyIntro(), {
+          parse_mode: 'HTML',
+          ...mainMenuKeyboard(),
+        });
+        await sleep(60);
+
+        await bot.telegram.sendMessage(
+          user.telegramId,
+          formatQuestion(question),
+          {
+            parse_mode: 'HTML',
+            ...showAnswerKeyboard(question.id),
+          }
+        );
+        sent += 2;
+      } catch (error) {
+        failed += 1;
+        console.error(
+          `[schedule] Hourly failed for user ${user.telegramId}:`,
+          error.message
+        );
+      }
+
+      await sleep(200);
+    }
+
+    console.log(
+      `[schedule] Hourly done. messages≈${sent}, userFailures=${failed}`
+    );
     return { users: users.length, sent, failed };
   }
 }
