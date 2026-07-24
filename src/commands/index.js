@@ -11,6 +11,7 @@ const {
   topicsCommand,
   bindCommand,
   listTopicsCommand,
+  practiceCommand,
 } = require('./topics');
 const {
   handleBackend,
@@ -18,6 +19,8 @@ const {
   handleFullstack,
   handleSql,
   handleMongodb,
+  handleCategoryCallback,
+  handlePracticeHere,
   handleRandom,
   handleShowAnswer,
   handleMarkProgress,
@@ -35,6 +38,7 @@ function registerCommands(bot) {
   bot.command('topics', topicsCommand);
   bot.command('bind', bindCommand);
   bot.command('listtopics', listTopicsCommand);
+  bot.command('practice', practiceCommand);
 
   bot.hears(MENU.BACKEND, handleBackend);
   bot.hears(MENU.FRONTEND, handleFrontend);
@@ -47,6 +51,8 @@ function registerCommands(bot) {
   bot.action('menu', handleMenu);
   bot.action('random', handleRandom);
   bot.action('progress', handleProgress);
+  bot.action('practice_here', handlePracticeHere);
+  bot.action(/^cat:(.+)$/, handleCategoryCallback);
   bot.action(/^answer:(\d+)$/, handleShowAnswer);
   bot.action(/^mark:(\d+):([01])$/, handleMarkProgress);
 

@@ -1,5 +1,9 @@
 const { isAdmin } = require('../utils/admin');
 const { groupTopicService } = require('../services');
+const {
+  practiceMenuFor,
+  withThread,
+} = require('../utils/keyboards');
 
 function getChatMeta(ctx) {
   const chat = ctx.chat || {};
@@ -22,10 +26,12 @@ async function whereAmICommand(ctx) {
         `chat_id: <code>${meta.chatId}</code>\n` +
         `type: ${meta.chatType}\n` +
         `forum/topics: ${meta.isForum ? 'yes' : 'no'}\n` +
-        `message_thread_id: <code>${meta.threadId ?? 'none (General or private)'}</code>\n\n` +
-        `Use /topics in this group (as admin) to create category topics.\n` +
-        `Or open a topic and run /bind Hourly`,
-      { parse_mode: 'HTML' }
+        `message_thread_id: <code>${meta.threadId ?? 'none'}</code>\n\n` +
+        `<b>Quick fix if /topics failed</b>\n` +
+        `1) Group → Administrators → WMAD bot → enable <b>Manage Topics</b>\n` +
+        `2) Or create topic manually, open it, run <code>/bind Hourly</code>\n` +
+        `3) Then <code>/sendhourly</code>`,
+      withThread(ctx, { parse_mode: 'HTML' })
     );
   } catch (error) {
     console.error('whereAmICommand error:', error);
@@ -48,14 +54,15 @@ async function topicsCommand(ctx) {
 
     if (!meta.isForum) {
       await ctx.reply(
-        'This group does not have Topics enabled.\n\n' +
-          'Telegram → Group settings → Topics → Enable, then try again.\n' +
-          'Also make the bot an admin with Manage Topics permission.'
+        'Enable Topics first:\nGroup settings → Topics → On\nThen make the bot admin with Manage Topics.'
       );
       return;
     }
 
-    await ctx.reply('Creating forum topics (Hourly + each category)...');
+    await ctx.reply(
+      'Creating forum topics (Hourly + each category)...',
+      withThread(ctx)
+    );
     const result = await groupTopicService.createDefaultTopics(
       ctx.telegram,
       meta.chatId
@@ -70,19 +77,37 @@ async function topicsCommand(ctx) {
         ? result.skipped.map((n) => `• ${n}`).join('\n')
         : '(none)';
 
+    const rightsFailed = result.skipped.some((s) =>
+      String(s).includes('not enough rights')
+    );
+
+    let help = '';
+    if (rightsFailed || result.created.length === 0) {
+      help =
+        `\n\n⚠️ Bot cannot create topics yet.\n` +
+        `Fix: Group → Administrators → <b>WMAD C3 Exam Prep Bot</b> → enable <b>Manage Topics</b>\n` +
+        `Then run /topics again.\n\n` +
+        `<b>Or manual setup now:</b>\n` +
+        `1. Create topics: Hourly, Backend, Frontend, ...\n` +
+        `2. Open each topic and run e.g. <code>/bind Hourly</code>\n` +
+        `3. Or in General run <code>/bind Hourly</code> to use General temporarily`;
+    } else {
+      help =
+        `\n\nUsers: open a topic → /start → tap buttons to practice in that topic.`;
+    }
+
     await ctx.reply(
-      `✅ Topics setup done.\n\n` +
+      `Topics setup result.\n\n` +
         `<b>Created</b>\n${createdText}\n\n` +
-        `<b>Skipped</b>\n${skippedText}\n\n` +
-        `Hourly drops go to topic <b>Hourly</b>.\n` +
-        `Daily packs post each category into its matching topic.`,
-      { parse_mode: 'HTML' }
+        `<b>Skipped</b>\n${skippedText}` +
+        help,
+      withThread(ctx, { parse_mode: 'HTML', ...practiceMenuFor(ctx) })
     );
   } catch (error) {
     console.error('topicsCommand error:', error);
     await ctx.reply(
       `Failed to create topics: ${error.message}\n` +
-        `Make sure the bot is admin with "Manage Topics".`
+        `Enable Manage Topics for the bot, or use /bind manually.`
     );
   }
 }
@@ -100,33 +125,31 @@ async function bindCommand(ctx) {
       return;
     }
 
-    if (!meta.threadId) {
+    const parts = (ctx.message.text || '').trim().split(/\s+/);
+    const name = parts.slice(1).join(' ').trim();
+    if (!name) {
       await ctx.reply(
-        'Open a specific topic (not All Messages), then run:\n' +
-          '/bind Hourly\n' +
-          '/bind Backend'
+        'Usage:\n/bind Hourly\n/bind Backend\n\nStand inside the topic first.'
       );
       return;
     }
 
-    const parts = (ctx.message.text || '').trim().split(/\s+/);
-    const name = parts.slice(1).join(' ').trim();
-    if (!name) {
-      await ctx.reply('Usage: /bind Hourly   or   /bind Backend');
-      return;
-    }
+    // General topic often has no thread id in some clients — use 1
+    const threadId = meta.threadId || 1;
 
     const saved = await groupTopicService.bind({
       chatId: meta.chatId,
       name,
-      threadId: meta.threadId,
+      threadId,
     });
 
     await ctx.reply(
-      `✅ Bound topic <b>${saved.name}</b>\n` +
-        `chat_id: <code>${saved.chatId}</code>\n` +
-        `thread_id: <code>${saved.threadId}</code>`,
-      { parse_mode: 'HTML' }
+      `✅ Bound <b>${saved.name}</b>\n` +
+        `chat: <code>${saved.chatId}</code>\n` +
+        `thread: <code>${saved.threadId}</code>\n\n` +
+        `Now /sendhourly posts here (if name is Hourly).\n` +
+        `Users can /start and practice in this topic.`,
+      withThread(ctx, { parse_mode: 'HTML', ...practiceMenuFor(ctx) })
     );
   } catch (error) {
     console.error('bindCommand error:', error);
@@ -143,12 +166,15 @@ async function listTopicsCommand(ctx) {
 
     const topics = await groupTopicService.list();
     if (topics.length === 0) {
-      await ctx.reply('No topics bound yet. Run /topics in your group.');
+      await ctx.reply(
+        'No topics bound yet.\nRun /topics (needs Manage Topics) or /bind Hourly'
+      );
       return;
     }
 
     const lines = topics.map(
-      (t) => `• <b>${t.name}</b> — chat <code>${t.chatId}</code> thread <code>${t.threadId}</code>`
+      (t) =>
+        `• <b>${t.name}</b> — chat <code>${t.chatId}</code> thread <code>${t.threadId}</code>`
     );
     await ctx.reply(`<b>Bound topics</b>\n\n${lines.join('\n')}`, {
       parse_mode: 'HTML',
@@ -159,9 +185,20 @@ async function listTopicsCommand(ctx) {
   }
 }
 
+async function practiceCommand(ctx) {
+  try {
+    const { handlePracticeHere } = require('./actions');
+    await handlePracticeHere(ctx);
+  } catch (error) {
+    console.error('practiceCommand error:', error);
+    await ctx.reply('Failed to start practice.');
+  }
+}
+
 module.exports = {
   whereAmICommand,
   topicsCommand,
   bindCommand,
   listTopicsCommand,
+  practiceCommand,
 };

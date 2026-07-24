@@ -36,6 +36,15 @@ class GroupTopicRepository {
     });
   }
 
+  async findByThread(chatId, threadId) {
+    return prisma.groupTopic.findFirst({
+      where: {
+        chatId: String(chatId),
+        threadId: Number(threadId),
+      },
+    });
+  }
+
   async findHourly() {
     return prisma.groupTopic.findFirst({
       where: { name: 'Hourly' },

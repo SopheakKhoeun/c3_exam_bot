@@ -2,6 +2,7 @@ const {
   userService,
   questionService,
   progressService,
+  groupTopicService,
 } = require('../services');
 const {
   formatQuestion,
@@ -10,10 +11,13 @@ const {
   formatWelcome,
 } = require('../utils/format');
 const {
-  mainMenuKeyboard,
   showAnswerKeyboard,
   markProgressKeyboard,
   afterProgressKeyboard,
+  practiceMenuFor,
+  withThread,
+  isGroupChat,
+  threadIdFromCtx,
 } = require('../utils/keyboards');
 
 async function sendQuestion(ctx, categoryName = null) {
@@ -21,20 +25,25 @@ async function sendQuestion(ctx, categoryName = null) {
 
   if (!question) {
     const label = categoryName || 'any category';
-    await ctx.reply(`No questions found for ${label}. Seed the database first.`, {
-      ...mainMenuKeyboard(),
-    });
+    await ctx.reply(
+      `No questions found for ${label}. Seed the database first.`,
+      withThread(ctx, practiceMenuFor(ctx))
+    );
     return;
   }
 
-  await ctx.reply(formatQuestion(question), {
-    parse_mode: 'HTML',
-    ...showAnswerKeyboard(question.id),
-  });
+  await ctx.reply(
+    formatQuestion(question),
+    withThread(ctx, {
+      parse_mode: 'HTML',
+      ...showAnswerKeyboard(question.id),
+    })
+  );
 }
 
 async function handleBackend(ctx) {
   try {
+    if (ctx.callbackQuery) await ctx.answerCbQuery();
     await sendQuestion(ctx, 'Backend');
   } catch (error) {
     console.error('handleBackend error:', error);
@@ -44,6 +53,7 @@ async function handleBackend(ctx) {
 
 async function handleFrontend(ctx) {
   try {
+    if (ctx.callbackQuery) await ctx.answerCbQuery();
     await sendQuestion(ctx, 'Frontend');
   } catch (error) {
     console.error('handleFrontend error:', error);
@@ -53,6 +63,7 @@ async function handleFrontend(ctx) {
 
 async function handleSql(ctx) {
   try {
+    if (ctx.callbackQuery) await ctx.answerCbQuery();
     await sendQuestion(ctx, 'SQL');
   } catch (error) {
     console.error('handleSql error:', error);
@@ -62,6 +73,7 @@ async function handleSql(ctx) {
 
 async function handleMongodb(ctx) {
   try {
+    if (ctx.callbackQuery) await ctx.answerCbQuery();
     await sendQuestion(ctx, 'MongoDB');
   } catch (error) {
     console.error('handleMongodb error:', error);
@@ -71,6 +83,7 @@ async function handleMongodb(ctx) {
 
 async function handleFullstack(ctx) {
   try {
+    if (ctx.callbackQuery) await ctx.answerCbQuery();
     await sendQuestion(ctx, 'Fullstack');
   } catch (error) {
     console.error('handleFullstack error:', error);
@@ -78,11 +91,42 @@ async function handleFullstack(ctx) {
   }
 }
 
+async function handleCategoryCallback(ctx) {
+  try {
+    const categoryName = ctx.match[1];
+    await ctx.answerCbQuery();
+    await sendQuestion(ctx, categoryName);
+  } catch (error) {
+    console.error('handleCategoryCallback error:', error);
+    await ctx.reply('Failed to load question. Please try again.');
+  }
+}
+
+async function handlePracticeHere(ctx) {
+  try {
+    if (ctx.callbackQuery) await ctx.answerCbQuery();
+
+    let categoryName = null;
+    if (isGroupChat(ctx)) {
+      const threadId = threadIdFromCtx(ctx);
+      if (threadId) {
+        const bound = await groupTopicService.getByThread(ctx.chat.id, threadId);
+        if (bound && bound.name !== 'Hourly') {
+          categoryName = bound.name;
+        }
+      }
+    }
+
+    await sendQuestion(ctx, categoryName);
+  } catch (error) {
+    console.error('handlePracticeHere error:', error);
+    await ctx.reply('Failed to load question. Please try again.');
+  }
+}
+
 async function handleRandom(ctx) {
   try {
-    if (ctx.callbackQuery) {
-      await ctx.answerCbQuery();
-    }
+    if (ctx.callbackQuery) await ctx.answerCbQuery();
     await sendQuestion(ctx, null);
   } catch (error) {
     console.error('handleRandom error:', error);
@@ -129,8 +173,10 @@ async function handleMarkProgress(ctx) {
     await ctx.answerCbQuery(correct ? 'Marked correct' : 'Marked wrong');
     await ctx.editMessageReplyMarkup(undefined);
     await ctx.reply(
-      correct ? '✅ Recorded as correct.' : '❌ Recorded as wrong. Keep practicing!',
-      { ...afterProgressKeyboard() }
+      correct
+        ? '✅ Recorded as correct.'
+        : '❌ Recorded as wrong. Keep practicing!',
+      withThread(ctx, afterProgressKeyboard())
     );
   } catch (error) {
     console.error('handleMarkProgress error:', error);
@@ -140,16 +186,17 @@ async function handleMarkProgress(ctx) {
 
 async function handleProgress(ctx) {
   try {
-    if (ctx.callbackQuery) {
-      await ctx.answerCbQuery();
-    }
+    if (ctx.callbackQuery) await ctx.answerCbQuery();
     const user = await userService.ensureUser(ctx.from);
     const stats = await progressService.getStats(user.id);
 
-    await ctx.reply(formatProgress(stats), {
-      parse_mode: 'HTML',
-      ...mainMenuKeyboard(),
-    });
+    await ctx.reply(
+      formatProgress(stats),
+      withThread(ctx, {
+        parse_mode: 'HTML',
+        ...practiceMenuFor(ctx),
+      })
+    );
   } catch (error) {
     console.error('handleProgress error:', error);
     await ctx.reply('Failed to load progress. Please try again.');
@@ -158,12 +205,11 @@ async function handleProgress(ctx) {
 
 async function handleMenu(ctx) {
   try {
-    if (ctx.callbackQuery) {
-      await ctx.answerCbQuery();
-    }
-    await ctx.reply(formatWelcome(ctx.from.first_name), {
-      ...mainMenuKeyboard(),
-    });
+    if (ctx.callbackQuery) await ctx.answerCbQuery();
+    await ctx.reply(
+      formatWelcome(ctx.from.first_name),
+      withThread(ctx, practiceMenuFor(ctx))
+    );
   } catch (error) {
     console.error('handleMenu error:', error);
     await ctx.reply('Failed to open menu. Please try /start.');
@@ -176,6 +222,8 @@ module.exports = {
   handleFullstack,
   handleSql,
   handleMongodb,
+  handleCategoryCallback,
+  handlePracticeHere,
   handleRandom,
   handleShowAnswer,
   handleMarkProgress,

@@ -18,6 +18,10 @@ class GroupTopicService {
     return groupTopicRepository.findAll(chatId);
   }
 
+  async getByThread(chatId, threadId) {
+    return groupTopicRepository.findByThread(chatId, threadId);
+  }
+
   async getHourlyTarget() {
     return groupTopicRepository.findHourly();
   }

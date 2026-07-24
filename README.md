@@ -180,28 +180,42 @@ http://localhost:3000/health
 
 ## Group Topics (forum mode)
 
-Make the bot post into Topics like a build-alert group:
+Practice happens **inside the group topics** (not only private chat).
 
-1. Open **WMAD C3 Bot** group → Group settings → enable **Topics**
-2. Add the bot as **Admin** with **Manage Topics** (+ post messages)
-3. In the group, send:
-   - `/whereami` — shows `chat_id` / `message_thread_id`
-   - `/topics` — creates topics: **Hourly**, Backend, Frontend, Fullstack, SQL, …
-4. Test: `/sendhourly` (posts into **Hourly** topic)
+### One-time setup
+1. Group → Administrators → **WMAD C3 Exam Prep Bot** → enable **Manage Topics**
+2. Wait for Railway redeploy
+3. In **# General** (or any topic), as admin:
+   ```text
+   /topics
+   ```
+   If create still fails, run in General:
+   ```text
+   /bind Hourly
+   ```
+4. Test:
+   ```text
+   /sendhourly
+   ```
+   Question should appear **in the group topic**.
 
-Optional manual bind (stand inside a topic):
+5. Tell classmates: open the group topic → `/start` → tap buttons / Show Answer
 
+### Manual topic bind
+Create topics yourself (Hourly, Backend, …), open each, run:
 ```text
 /bind Hourly
 /bind Backend
 ```
 
-List bindings: `/listtopics`
+### Env
+```env
+SCHEDULE_DM=false
+```
+`false` = scheduled drops go to **group topics only** (recommended).  
+Set `true` if you also want private DM drops.
 
-Scheduled drops then go to:
-- **Hourly topic** → every hour (1 question)
-- **Each category topic** → 08:00 & 13:00 packs
-- Plus private DMs for users who used `/start`
+Private `/start` still works for solo practice anytime.
 
 
 | Schedule | What users get |

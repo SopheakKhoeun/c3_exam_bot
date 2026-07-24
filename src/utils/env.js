@@ -19,6 +19,8 @@ const env = {
   cronAfternoon: process.env.CRON_AFTERNOON || '0 13 * * *',
   // Default: every hour at minute 0
   cronHourly: process.env.CRON_HOURLY || '0 * * * *',
+  // When false, scheduled drops go to group topics only (not private DMs)
+  scheduleDm: String(process.env.SCHEDULE_DM || 'false').toLowerCase() === 'true',
 };
 
 module.exports = { env };
