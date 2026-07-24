@@ -69,6 +69,15 @@ async function handleMongodb(ctx) {
   }
 }
 
+async function handleFullstack(ctx) {
+  try {
+    await sendQuestion(ctx, 'Fullstack');
+  } catch (error) {
+    console.error('handleFullstack error:', error);
+    await ctx.reply('Failed to load question. Please try again.');
+  }
+}
+
 async function handleRandom(ctx) {
   try {
     if (ctx.callbackQuery) {
@@ -164,6 +173,7 @@ async function handleMenu(ctx) {
 module.exports = {
   handleBackend,
   handleFrontend,
+  handleFullstack,
   handleSql,
   handleMongodb,
   handleRandom,

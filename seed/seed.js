@@ -11,12 +11,18 @@ const {
   expressQuestions,
   tailwindQuestions,
 } = require('./data/c3Questions');
+const {
+  fullstackQuestions,
+  miniStoreBackendExtra,
+  orderDeskExtra,
+} = require('./data/fullstackScenarios');
 
 const prisma = new PrismaClient();
 
 const CATEGORIES = [
   'Backend',
   'Frontend',
+  'Fullstack',
   'Prisma',
   'SQL',
   'MongoDB',
@@ -26,8 +32,9 @@ const CATEGORIES = [
 ];
 
 const QUESTIONS_BY_CATEGORY = {
-  Backend: backendQuestions,
-  Frontend: frontendQuestions,
+  Backend: [...backendQuestions, ...miniStoreBackendExtra],
+  Frontend: [...frontendQuestions, ...orderDeskExtra],
+  Fullstack: fullstackQuestions,
   SQL: sqlQuestions,
   MongoDB: mongodbQuestions,
   Prisma: prismaQuestions,
@@ -37,9 +44,8 @@ const QUESTIONS_BY_CATEGORY = {
 };
 
 async function seed() {
-  console.log('Seeding C3 WMAD exam questions...');
+  console.log('Seeding C3 WMAD + Fullstack practice questions...');
 
-  // Replace previous practice set with C3 source questions
   await prisma.progress.deleteMany();
   await prisma.question.deleteMany();
 
@@ -79,7 +85,7 @@ async function seed() {
   }
 
   const total = await prisma.question.count();
-  console.log(`Seed complete. Created ${created} C3 questions. Total in DB: ${total}`);
+  console.log(`Seed complete. Created ${created} questions. Total in DB: ${total}`);
 }
 
 seed()

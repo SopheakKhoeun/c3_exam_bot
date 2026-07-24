@@ -9,6 +9,7 @@ const { sendNowCommand } = require('./sendNow');
 const {
   handleBackend,
   handleFrontend,
+  handleFullstack,
   handleSql,
   handleMongodb,
   handleRandom,
@@ -26,6 +27,7 @@ function registerCommands(bot) {
 
   bot.hears(MENU.BACKEND, handleBackend);
   bot.hears(MENU.FRONTEND, handleFrontend);
+  bot.hears(MENU.FULLSTACK, handleFullstack);
   bot.hears(MENU.SQL, handleSql);
   bot.hears(MENU.MONGODB, handleMongodb);
   bot.hears(MENU.RANDOM, handleRandom);

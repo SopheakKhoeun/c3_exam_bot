@@ -9,6 +9,7 @@ const { startSchedulers } = require('./services/scheduler');
 const DEFAULT_CATEGORIES = [
   'Backend',
   'Frontend',
+  'Fullstack',
   'Prisma',
   'SQL',
   'MongoDB',

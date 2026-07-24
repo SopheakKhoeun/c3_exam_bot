@@ -42,7 +42,7 @@ function formatWelcome(firstName) {
   return (
     `👋 Welcome ${name}!\n\n` +
     `Welcome to WMAD C3 Exam Prep Bot.\n\n` +
-    `Practice from Skill 3–6 + Mini Store / Order Desk.\n\n` +
+    `Practice from Skill 3–6 + Mini Store / Order Desk fullstack.\n\n` +
     `Choose a topic below.\n\n` +
     `Powered by @sopheak_dev`
   );

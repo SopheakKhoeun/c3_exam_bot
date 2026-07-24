@@ -3,6 +3,7 @@ const { Markup } = require('telegraf');
 const MENU = {
   BACKEND: '📚 Backend',
   FRONTEND: '🎨 Frontend',
+  FULLSTACK: '🛒 Fullstack',
   SQL: '🗄 SQL',
   MONGODB: '🍃 MongoDB',
   RANDOM: '🎲 Random Question',
@@ -12,8 +13,9 @@ const MENU = {
 function mainMenuKeyboard() {
   return Markup.keyboard([
     [MENU.BACKEND, MENU.FRONTEND],
-    [MENU.SQL, MENU.MONGODB],
-    [MENU.RANDOM, MENU.PROGRESS],
+    [MENU.FULLSTACK, MENU.SQL],
+    [MENU.MONGODB, MENU.RANDOM],
+    [MENU.PROGRESS],
   ]).resize();
 }
 
