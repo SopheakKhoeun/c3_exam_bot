@@ -4,7 +4,6 @@
   "description": "WMAD C3 Exam Prep Bot — Telegram bot for practical exam practice questions",
   "main": "src/bot.js",
   "scripts": {
-    "postinstall": "prisma generate",
     "start": "node src/bot.js",
     "start:prod": "prisma migrate deploy && node src/bot.js",
     "dev": "node --watch src/bot.js",
