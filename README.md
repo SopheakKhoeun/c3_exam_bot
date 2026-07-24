@@ -178,7 +178,31 @@ Health check:
 http://localhost:3000/health
 ```
 
-## Daily Auto Practice
+## Group Topics (forum mode)
+
+Make the bot post into Topics like a build-alert group:
+
+1. Open **WMAD C3 Bot** group → Group settings → enable **Topics**
+2. Add the bot as **Admin** with **Manage Topics** (+ post messages)
+3. In the group, send:
+   - `/whereami` — shows `chat_id` / `message_thread_id`
+   - `/topics` — creates topics: **Hourly**, Backend, Frontend, Fullstack, SQL, …
+4. Test: `/sendhourly` (posts into **Hourly** topic)
+
+Optional manual bind (stand inside a topic):
+
+```text
+/bind Hourly
+/bind Backend
+```
+
+List bindings: `/listtopics`
+
+Scheduled drops then go to:
+- **Hourly topic** → every hour (1 question)
+- **Each category topic** → 08:00 & 13:00 packs
+- Plus private DMs for users who used `/start`
+
 
 | Schedule | What users get |
 |----------|----------------|
@@ -215,6 +239,10 @@ Admin test commands:
 | `/add` | Admin-only interactive question creation |
 | `/sendnow` | Admin-only: daily all-category send now |
 | `/sendhourly` | Admin-only: hourly 1-question send now |
+| `/whereami` | Show chat_id + topic thread_id |
+| `/topics` | Admin: create Hourly + category forum topics |
+| `/bind <name>` | Admin: bind current topic (e.g. `/bind Hourly`) |
+| `/listtopics` | Admin: list bound group topics |
 
 ### `/start` buttons
 

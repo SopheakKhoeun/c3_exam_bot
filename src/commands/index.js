@@ -7,6 +7,12 @@ const {
 } = require('./add');
 const { sendNowCommand, sendHourlyNowCommand } = require('./sendNow');
 const {
+  whereAmICommand,
+  topicsCommand,
+  bindCommand,
+  listTopicsCommand,
+} = require('./topics');
+const {
   handleBackend,
   handleFrontend,
   handleFullstack,
@@ -25,6 +31,10 @@ function registerCommands(bot) {
   bot.command('add', addCommand);
   bot.command('sendnow', sendNowCommand);
   bot.command('sendhourly', sendHourlyNowCommand);
+  bot.command('whereami', whereAmICommand);
+  bot.command('topics', topicsCommand);
+  bot.command('bind', bindCommand);
+  bot.command('listtopics', listTopicsCommand);
 
   bot.hears(MENU.BACKEND, handleBackend);
   bot.hears(MENU.FRONTEND, handleFrontend);

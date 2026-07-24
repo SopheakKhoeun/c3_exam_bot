@@ -2,6 +2,7 @@ const {
   userService,
   categoryService,
   questionService,
+  groupTopicService,
 } = require('./index');
 const { formatQuestion, escapeHtml } = require('../utils/format');
 const { showAnswerKeyboard, mainMenuKeyboard } = require('../utils/keyboards');
@@ -26,31 +27,135 @@ function formatHourlyIntro() {
   );
 }
 
-class ScheduleService {
-  /**
-   * Send one random question per category to every registered user.
-   */
-  async sendAllCategories(bot, slotLabel = 'Daily') {
-    const [users, categories] = await Promise.all([
-      userService.listAll(),
-      categoryService.list(),
-    ]);
+function threadOptions(threadId) {
+  if (threadId == null) {
+    return {};
+  }
+  return { message_thread_id: Number(threadId) };
+}
 
-    if (users.length === 0) {
-      console.log('[schedule] No users to notify');
-      return { users: 0, sent: 0, failed: 0 };
+class ScheduleService {
+  async sendToChat(bot, chatId, text, extra = {}) {
+    return bot.telegram.sendMessage(chatId, text, extra);
+  }
+
+  async sendAllCategoriesToGroup(bot, slotLabel = 'Daily') {
+    const topics = await groupTopicService.list();
+    if (topics.length === 0) {
+      return { sent: 0, failed: 0, skipped: true };
     }
 
-    if (categories.length === 0) {
-      console.log('[schedule] No categories found');
-      return { users: users.length, sent: 0, failed: 0 };
+    const chatIds = [...new Set(topics.map((t) => t.chatId))];
+    const categories = await categoryService.list();
+    let sent = 0;
+    let failed = 0;
+
+    for (const chatId of chatIds) {
+      try {
+        const hourlyOrGeneral = topics.find(
+          (t) => t.chatId === chatId && t.name === 'Hourly'
+        );
+
+        await this.sendToChat(
+          bot,
+          chatId,
+          formatScheduleIntro(slotLabel),
+          {
+            parse_mode: 'HTML',
+            ...threadOptions(hourlyOrGeneral?.threadId),
+          }
+        );
+        sent += 1;
+        await sleep(100);
+
+        for (const category of categories) {
+          const question = await questionService.getRandom(category.name);
+          if (!question) {
+            continue;
+          }
+
+          const topic = topics.find(
+            (t) => t.chatId === chatId && t.name === category.name
+          );
+
+          await this.sendToChat(bot, chatId, formatQuestion(question), {
+            parse_mode: 'HTML',
+            ...showAnswerKeyboard(question.id),
+            ...threadOptions(topic?.threadId || hourlyOrGeneral?.threadId),
+          });
+          sent += 1;
+          await sleep(150);
+        }
+      } catch (error) {
+        failed += 1;
+        console.error(`[schedule] Group pack failed (${chatId}):`, error.message);
+      }
+    }
+
+    return { sent, failed, skipped: false };
+  }
+
+  async sendHourlyToGroup(bot) {
+    const target = await groupTopicService.getHourlyTarget();
+    if (!target) {
+      return { sent: 0, failed: 0, skipped: true };
+    }
+
+    const question = await questionService.getRandom(null);
+    if (!question) {
+      return { sent: 0, failed: 0, skipped: true };
     }
 
     let sent = 0;
     let failed = 0;
 
+    try {
+      await this.sendToChat(bot, target.chatId, formatHourlyIntro(), {
+        parse_mode: 'HTML',
+        ...threadOptions(target.threadId),
+      });
+      await sleep(80);
+      await this.sendToChat(bot, target.chatId, formatQuestion(question), {
+        parse_mode: 'HTML',
+        ...showAnswerKeyboard(question.id),
+        ...threadOptions(target.threadId),
+      });
+      sent = 2;
+    } catch (error) {
+      failed = 1;
+      console.error('[schedule] Group hourly failed:', error.message);
+    }
+
+    return { sent, failed, skipped: false };
+  }
+
+  async sendAllCategories(bot, slotLabel = 'Daily') {
+    const users = await userService.listAll();
+    const categories = await categoryService.list();
+
+    let sent = 0;
+    let failed = 0;
+
+    const groupResult = await this.sendAllCategoriesToGroup(bot, slotLabel);
+    sent += groupResult.sent;
+    failed += groupResult.failed;
+
+    if (users.length === 0) {
+      console.log('[schedule] No DM users; group-only mode possible');
+      return {
+        users: 0,
+        sent,
+        failed,
+        group: groupResult,
+      };
+    }
+
+    if (categories.length === 0) {
+      return { users: users.length, sent, failed, group: groupResult };
+    }
+
     console.log(
-      `[schedule] Sending ${categories.length} categories to ${users.length} user(s) (${slotLabel})`
+      `[schedule] DM pack: ${categories.length} categories → ${users.length} user(s) (${slotLabel})`
     );
 
     for (const user of users) {
@@ -94,25 +199,25 @@ class ScheduleService {
       await sleep(250);
     }
 
-    console.log(`[schedule] Done. messages≈${sent}, userFailures=${failed}`);
-    return { users: users.length, sent, failed };
+    console.log(`[schedule] Done. messages≈${sent}, failures=${failed}`);
+    return { users: users.length, sent, failed, group: groupResult };
   }
 
-  /**
-   * Send one random question (any category) to every registered user.
-   */
   async sendHourlyQuestion(bot) {
     const users = await userService.listAll();
-
-    if (users.length === 0) {
-      console.log('[schedule] Hourly: no users to notify');
-      return { users: 0, sent: 0, failed: 0 };
-    }
-
     let sent = 0;
     let failed = 0;
 
-    console.log(`[schedule] Hourly drop to ${users.length} user(s)`);
+    const groupResult = await this.sendHourlyToGroup(bot);
+    sent += groupResult.sent;
+    failed += groupResult.failed;
+
+    if (users.length === 0) {
+      console.log('[schedule] Hourly: no DM users');
+      return { users: 0, sent, failed, group: groupResult };
+    }
+
+    console.log(`[schedule] Hourly DM drop to ${users.length} user(s)`);
 
     for (const user of users) {
       try {
@@ -149,9 +254,9 @@ class ScheduleService {
     }
 
     console.log(
-      `[schedule] Hourly done. messages≈${sent}, userFailures=${failed}`
+      `[schedule] Hourly done. messages≈${sent}, failures=${failed}`
     );
-    return { users: users.length, sent, failed };
+    return { users: users.length, sent, failed, group: groupResult };
   }
 }
 

@@ -48,3 +48,15 @@ model Progress {
   @@index([userId])
   @@index([questionId])
 }
+
+/// Telegram forum topic binding for group practice drops
+model GroupTopic {
+  id        Int      @id @default(autoincrement())
+  chatId    String
+  name      String
+  threadId  Int
+  createdAt DateTime @default(now())
+
+  @@unique([chatId, name])
+  @@index([chatId])
+}
